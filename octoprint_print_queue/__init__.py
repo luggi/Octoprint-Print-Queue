@@ -115,7 +115,7 @@ class PrintQueuePlugin(octoprint.plugin.StartupPlugin,
 
     # Event Handling
     def on_event(self, event, payload):
-		self._logger.info("PQ: event" + str(event) + "  " + str(self.printqueue));
+        self._logger.info("PQ: event" + str(event) + "  " + str(self.printqueue))
         if event == "PrintDone":
             if self.printqueue > 0:
                 self.printqueue -= 1
