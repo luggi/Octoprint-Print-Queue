@@ -6,6 +6,8 @@ from pprint import pprint
 from octoprint.server import printer, NO_CONTENT
 import flask
 import os
+from threading import Timer
+import time
 
 class PrintQueuePlugin(octoprint.plugin.StartupPlugin,
     octoprint.plugin.TemplatePlugin,
@@ -115,11 +117,15 @@ class PrintQueuePlugin(octoprint.plugin.StartupPlugin,
 
     # Event Handling
     def on_event(self, event, payload):
-        self._logger.info("PQ: event" + str(event) + "  " + str(self.printqueue))
         if event == "PrintDone":
             if self.printqueue > 0:
                 self.printqueue -= 1
-                if self.printqueue > 0: self._printer.start_print()
+                self._logger.info("PQ: event" + str(event) + "  " + str(self.printqueue))
+                if self.printqueue > 0: 
+					self._logger.info("starting print")
+					print(self._printer.get_current_data())
+					t = Timer(5.0, self._printer.start_print)
+					t.start()
         return
 
 __plugin_name__ = "Print Queue"
